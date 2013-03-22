@@ -31,7 +31,7 @@ class Ackey(BaseFunction):
     
 if __name__ == "__main__":
     f = Ackey()
-#    f.test_potential(f.get_random_configuration())
+    f.test_potential(f.get_random_configuration())
     
     from base_function import makeplot2d
     makeplot2d(f)
