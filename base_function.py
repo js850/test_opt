@@ -1,3 +1,5 @@
+import numpy as np
+
 from pygmin.potentials import BasePotential
 
 class BaseFunction(BasePotential):
@@ -8,6 +10,14 @@ class BaseFunction(BasePotential):
     
     def fg(self, x):
         return self.getEnergyGradient(x)
+    
+    
+    def get_random_configuration(self, eps=1e-3):
+        xmin, xmax = self.xmin, self.xmax
+        x = np.random.uniform(xmin[0] + eps, xmax[0] - eps)
+        y = np.random.uniform(xmin[1] + eps, xmax[1] - eps)
+        return np.array([x,y])
+
 
 
 def makeplot2d(f, nx=100):

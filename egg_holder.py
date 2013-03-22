@@ -2,21 +2,21 @@ from numpy import exp, cos, sqrt, pi, sin
 import numpy as np
 
 from base_function import BaseFunction
-from pygmin.systems import BaseSystem
-from ackey import BenchmarkSystem
 
-class EHBenchmarkSystem(BenchmarkSystem):
-    def __init__(self, *args):
-        super(EHBenchmarkSystem, self).__init__(*args)
-        self.params.basinhopping.temperature = 10.
-    def get_takestep(self, **kwargs):
-        print "mytakestep is being called"
-        if "stepsize" in kwargs:
-            kwargs.pop("stepsize")
-        return super(EHBenchmarkSystem, self).get_takestep(stepsize=100., verbose=True, interval=50., **kwargs)
+#class EHBenchmarkSystem(BenchmarkSystem):
+#    def __init__(self, *args):
+#        super(EHBenchmarkSystem, self).__init__(*args)
+#        self.params.basinhopping.temperature = 10.
+#    def get_takestep(self, **kwargs):
+#        print "mytakestep is being called"
+#        if "stepsize" in kwargs:
+#            kwargs.pop("stepsize")
+#        return super(EHBenchmarkSystem, self).get_takestep(stepsize=100., verbose=True, interval=50., **kwargs)
         
 
 class EggHolder(BaseFunction):
+    xmin = np.array([-512.,-512.])
+    xmax = np.array([512.,512.])
     target_E = -959.6407
     def getEnergy(self, coords):
         x, y = coords
@@ -28,7 +28,8 @@ class EggHolder(BaseFunction):
         elif x < 0: return -1.
         else: return 0.
     
-    def getEnergyGradient(self, coords):
+    def getEnergyGradient_2(self, coords):
+        """there is a bug here.  it doesn't pass the test"""
         E = self.getEnergy(coords)
         x, y = coords
         dEdy = (-sin(sqrt(abs(47. + 0.5*x + y))) + 
@@ -52,19 +53,12 @@ class EggHolder(BaseFunction):
             )/sqrt(abs(47. + 0.5*x + y)))
         grad = np.array([dEdx, dEdy])
         print "grad", grad
-        return grad
-
-    def get_limits(self):
-        xmin = np.array([-512,-512])
-        xmax = np.array([512,512])
-        return xmin, xmax
+        return E, grad
 
 if __name__ == "__main__":
-    pot = EggHolder()
-    print pot.getEnergy([512, 404.2319])
-    print pot.NumericalDerivative(np.array([512, 404.2319]), eps=1e-7)
-    print pot.getEnergyGradient([512, 404.2319])
-    exit(10)
-    mysys = EHBenchmarkSystem(EggHolder())
-    mysys.do_benchmark()
-    exit(1)
+    f = EggHolder()
+#    f.test_potential(f.get_random_configuration())
+    
+    from base_function import makeplot2d
+    makeplot2d(EggHolder())
+    
