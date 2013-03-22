@@ -23,6 +23,8 @@ class Rosenbrock(BaseFunction):
     
 if __name__ == "__main__":
     f = Rosenbrock()
+    f.test_potential(f.target_coords)
+    print ""
     f.test_potential(f.get_random_configuration())
     
     from base_function import makeplot2d
