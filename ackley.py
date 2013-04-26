@@ -3,7 +3,7 @@ from numpy import exp, sqrt, cos, pi, sin
 
 from base_function import BaseFunction
 
-class Ackey(BaseFunction):
+class Ackley(BaseFunction):
     #note: this function is not smooth at the origin.  the gradient will never
     #converge in the minimizer
     target_E = 0.
@@ -30,7 +30,7 @@ class Ackey(BaseFunction):
         return E, np.array([dEdx, dEdy])
     
 if __name__ == "__main__":
-    f = Ackey()
+    f = Ackley()
     f.test_potential(f.get_random_configuration())
     
     from base_function import makeplot2d
