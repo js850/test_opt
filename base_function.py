@@ -20,15 +20,19 @@ class BaseFunction(BasePotential):
 
 
 
-def makeplot2d(f, nx=100):
+def makeplot2d(f, nx=100, xmin=None, xmax=None, zlim=None):
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib import cm
     import matplotlib.pyplot as plt
     import numpy as np
     
     ny = nx
-    xmin, ymin = f.xmin[:2]
-    xmax, ymax = f.xmax[:2]
+    if xmin is None:
+        xmin = f.xmin[:2]
+    xmin, ymin = xmin
+    if xmax is None:
+        xmax = f.xmax[:2]
+    xmax, ymax = xmax
     x = np.arange(xmin, xmax, (xmax-xmin)/nx)
     y = np.arange(ymin, ymax, (ymax-ymin)/ny)
     X, Y = np.meshgrid(x, y)
@@ -43,7 +47,8 @@ def makeplot2d(f, nx=100):
     surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.coolwarm,
         linewidth=0, antialiased=False)
     
-#    ax.set_zlim(-1.01, 1.01)
+    if zlim is not None:
+        ax.set_zlim(zlim)
 
 #    ax.zaxis.set_major_locator(LinearLocator(10))
 #    ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
